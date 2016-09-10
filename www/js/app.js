@@ -25,9 +25,12 @@ angular.module('app', ['ionic','firebase','app.controllers', 'app.routes', 'app.
     //if login succesfull go to home page
     $state.go('homePage');
     });
-
+    $rootScope.$on('event:app-SignUpSuccessfull',function() {
+    //if Sign Up succesfull go to picture set page
+    $state.go('setPicture');
+    });
     $rootScope.$on('event:app-LogOutSuccessfull', function() {
-    //if logOut succesfull go to home page
+    //if logOut succesfull go to log in page
     $state.go('login');
   });
 

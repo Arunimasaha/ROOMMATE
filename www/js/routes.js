@@ -10,7 +10,7 @@ angular.module('app.routes', [])
     
   
 
-      .state('landingPage', {
+    .state('landingPage', {
     url: '/page1',
     templateUrl: 'templates/landingPage.html',
     controller: 'landingPageCtrl'
@@ -32,6 +32,12 @@ angular.module('app.routes', [])
     url: '/page4',
     templateUrl: 'templates/homePage.html',
     controller: 'homePageCtrl'
+  })
+
+      .state('setPicture', {
+    url: '/page5',
+    templateUrl: 'templates/setPicture.html',
+    controller: 'setPictureCtrl'
   })
 
 $urlRouterProvider.otherwise('/page1')

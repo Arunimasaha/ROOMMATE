@@ -1,25 +1,29 @@
 <ion-view title="Signup" id="page3">
-    <ion-content overflow-scroll="true" padding="true" scroll="true">
-        <div style="line-height: 250px; border: 1px solid rgb(238, 238, 238); border-radius: 3px; text-align: center; background-color: rgb(255, 255, 255);">
-            <i class="icon ion-image" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle;"></i>
+    <ion-content overflow-scroll="true" padding="true" scroll="false">
+        <!-- <div style="line-height: 250px; border: 1px solid rgb(238, 238, 238); border-radius: 3px; text-align: center; background-color: rgb(255, 255, 255);">
+        <img src="default.png">
+           <i class="icon ion-image" style="font-size: 64px; color: rgb(136, 136, 136); vertical-align: middle;"></i> 
+        </div> -->
+        <div class="item item-image" style="line-height: 250px;background-color: rgb(255, 255, 255);">
+            <img ng-src="img/CreateUser.png">
         </div>
         <div class="spacer" style="width: 300px; height: 23px;"></div>
         <form class="list">
             <ion-list>
                 <label class="item item-input">
-                    <input type="text" placeholder="Name">
+                    <input type="text" placeholder="Name" ng-model="name">
                 </label>
                 <label class="item item-input">
                     <input type="email" placeholder="Email" ng-model="email">
                 </label>
                 <label class="item item-input">
-                <input type="number" placeholder="Phone Number">
+                <input type="number" placeholder="Phone Number" ng-model="phoneNo">
                 </label>
                 <label class="item item-input">
                     <input type="password" placeholder="Password" ng-model="password">
                 </label>
             </ion-list>
-            <a ng-click="signIn(email,password)" id="signup-button3" class="button button-stable  button-block">Sign up</a>
+            <a ng-click="signIn(name,email,phoneNo,password)" id="signup-button3" class="button button-stable  button-block">Sign up</a>
         </form>
     </ion-content>
 </ion-view>

@@ -66,6 +66,7 @@ angular.module('app.services', [])
 		        } else if (user) {
 		          // user authenticated with Firebase
 		          $rootScope.user = user;
+		          console.log(user);
 		          $rootScope.$broadcast('event:app-LoginSuccessfull');
 		        } else {
 		          // user is logged out
@@ -80,39 +81,53 @@ angular.module('app.services', [])
 			console.log(email+" "+password);
 			auth.$createUser(email, password, function (error, user) {
 	          if (!error) {
-	          	console.log("Successfull"+user.uid);
+	          	
 	            $rootScope.user = user;
-	            $rootScope.$broadcast('event:app-LoginSuccessfull');
-	            //auth.child
-	            return 1;
+	            console.log("Successfull"+ user.uid+" "+$rootScope.userid );
+	            $rootScope.$broadcast('event:app-SignUpSuccessfull');
+	            //return user.uid;
 	          }
 	          else {
 	            console.log("UNNNSuccessfull");
 	            if (error.code == 'INVALID_EMAIL') {
 	            	console.log("inavalid email");
 	              $rootScope.$broadcast('event:app-invalidCredentials');
-	              return 0;
 	            }
 	            else if (error.code == 'EMAIL_TAKEN') {
 	            	console.log("email taken");
 	            	$rootScope.signIn_error="Email already taken";
 	              $rootScope.$broadcast('event:app-emailAlreadyTaken');
-	              return 0;
 	            }
 	            else {
 	            	console.log("inavalid");
 	              $rootScope.login_error="Network Error";
-	              return 0;
 	            }
 	          }
 	        });
-	}
-
+		},
+		createDBNode : function(ID,type,profileData)
+		{
+			console.log("Profile Create");
+			//console.log(name+" "+email+" "+phoneNo);
+			var usersRef = authRef.child(type).child(ID);
+    		usersRef.set(profileData);
+		},
+		getDBValues :function(rootElement,type)
+		{
+			console.log("Getting Values" + rootElement);
+			var dbRef=authRef.child(type).child(rootElement);
+			dbRef.once("value", function(snapshot) {
+				$rootScope.userProfile=snapshot.val();
+  			console.log(snapshot.val().full_name+"succesfull");
+			}, function (errorObject) {
+			  console.log("The read failed: " + errorObject.code);
+			});
+		}
 	};
 
 }])
 
-.service('MainService', ['Mainfactory',function(Mainfactory){
+.service('MainService', ['Mainfactory','$rootScope',function(Mainfactory,$rootScope){
 
 	
 		this.connect = function()
@@ -121,11 +136,25 @@ angular.module('app.services', [])
 			Mainfactory.connect();
 			Mainfactory.getAuth();
 		};
-
-		this.createUser = function(email,password)
+		//Sign-Up page service
+		this.createUser = function(name,email,phoneNo,password)
 		{
 			console.log("In service");
 			Mainfactory.createUser(email,password);
+		 	$rootScope.$on('event:app-SignUpSuccessfull', function() {
+    		//if login succesfull go to home page
+            console.log("In service "+$rootScope.user.uid);
+            var profileData={
+        			full_name: name,
+        			e_mail: email, 
+        			e_mail_verified:false,
+        			phone_number:phoneNo,
+        			phone_number_verified:false,
+        			profile_pic:""
+    		};
+			Mainfactory.createDBNode($rootScope.user.uid,"Profiles",profileData);  //node name,node type,json data
+
+            });
 		};
 
 		this.logIn = function(email,password)
@@ -134,6 +163,13 @@ angular.module('app.services', [])
 			console.log('In service');
 			console.log(email +" "+password);
 			Mainfactory.logIn(email,password);
+			$rootScope.$on('event:app-LoginSuccessfull', function() {
+    		//if login succesfull go to home page
+            console.log("Get Value call "+$rootScope.user.uid);
+           
+			Mainfactory.getDBValues($rootScope.user.uid,"Profiles");  //node name,node type,json data
+
+            });
 		};
 
 		this.logOut = function()

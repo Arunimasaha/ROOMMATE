@@ -20,24 +20,23 @@ angular.module('app.controllers', ['app.services'])
    
 .controller('signupCtrl', ['$scope', '$rootScope','MainService',function($scope,$rootScope,MainService) {
 
-	$rootScope.signIn = function(email,password)
+	$rootScope.signIn = function(name,email,phoneNo,password)
 	{
 		console.log("in login");
 		console.log(email +" "+password);
 
-		MainService.createUser(email,password);
-
-		$rootScope.$on('event:app-LoginSuccessfull', function() {
-    //if login succesfull go to home page
-		    console.log("In controller "+$rootScope.user.uid);
-		    });
+		MainService.createUser(name,email,phoneNo,password);
 	}
 
 
 
 }])
    
-.controller('homePageCtrl', function($scope) {
+.controller('homePageCtrl',['$scope', '$rootScope', function($scope) {
 
+}])
+
+.controller('setPictureCtrl', function($scope) {
+	console.log("in Set Picture");
 })
  
